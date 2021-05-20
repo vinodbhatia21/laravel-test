@@ -8,6 +8,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Date;
+use DB;
 
 class EventsController extends BaseController
 {
@@ -177,6 +178,9 @@ class EventsController extends BaseController
      */
 
     public function getFutureEventsWithWorkshops() {
-        throw new \Exception('implement in coding task 2');
+        $futureEventsWithWorkshop =  Event::with('workshops')->whereHas('workshops', function ($query) {
+            $query->where('start', '>', date('Y-m-d H:i:s'));
+        })->get();
+        return response($futureEventsWithWorkshop, 200);
     }
 }
